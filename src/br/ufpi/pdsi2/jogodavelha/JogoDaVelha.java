@@ -1,7 +1,9 @@
 package br.ufpi.pdsi2.jogodavelha;
 
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.List;
+import java.util.Scanner;
 
 public class JogoDaVelha {
 
@@ -54,30 +56,32 @@ public class JogoDaVelha {
 	}
 
 	private boolean verificaDiagonais() {
-		if (tabuleiro[0][0].equals(tabuleiro[1][1])
-				&& tabuleiro[0][0].equals(tabuleiro[2][2]))
+		if (tabuleiro[0][0].equals("X") && tabuleiro[1][1].equals("X") && tabuleiro[2][2].equals("X"))
 			return true;
-		if (tabuleiro[0][2].equals(tabuleiro[1][1])
-				&& tabuleiro[0][2].equals(tabuleiro[2][0]))
+		else if (tabuleiro[0][0].equals("O") && tabuleiro[1][1].equals("O") && tabuleiro[2][2].equals("O"))
+			return true;
+		else if(tabuleiro[0][2].equals("X") && tabuleiro[1][1].equals("X") && tabuleiro[2][0].equals("X"))
+			return true;
+		else if(tabuleiro[0][2].equals("O") && tabuleiro[1][1].equals("O") && tabuleiro[2][0].equals("O"))
 			return true;
 		return false;
 	}
 
 	private boolean verificaColuna(int i) {
-		boolean resultado = true;
-		for (int lin = 0; lin < 2; lin++) {
-			if (!tabuleiro[lin][i - 1].equals(tabuleiro[lin + 1][i - 1]))
-				resultado = false;
-		}
+		boolean resultado = false;
+		if (tabuleiro[0][i - 1].equals("X") && tabuleiro[1][i - 1].equals("X") && tabuleiro[2][i - 1].equals("X"))
+			resultado = true;
+		else if(tabuleiro[0][i - 1].equals("O") && tabuleiro[1][i - 1].equals("O") && tabuleiro[2][i - 1].equals("O"))
+			resultado = true;
 		return resultado;
 	}
 
 	private boolean verificaLinha(int i) {
-		boolean resultado = true;
-		for (int col = 0; col < 2; col++) {
-			if (!tabuleiro[i - 1][col].equals(tabuleiro[i - 1][col + 1]))
-				resultado = false;
-		}
+		boolean resultado = false;
+			if (tabuleiro[i - 1][0].equals("X") && tabuleiro[i - 1][1].equals("X") && tabuleiro[i - 1][2].equals("X"))
+				resultado = true;
+			else if(tabuleiro[i - 1][0].equals("O") && tabuleiro[i - 1][1].equals("O") && tabuleiro[i - 1][2].equals("O"))
+				resultado = true;
 		return resultado;
 	}
 
@@ -170,8 +174,14 @@ public class JogoDaVelha {
 	}
 
 	private void imprimeTabuleiro() {
-
-		this.numJogadas++;
+		for(int i=0;i<3;i++) {
+			for(int j=0;j<3;j++) {
+				System.out.print(this.tabuleiro[i][j]+" | ");
+			}
+			System.out.println("");
+		}
+		System.out.println("");
+		this.numJogadas++;	
 	}
 
 	public int getOrdemDeJogada() {
@@ -180,6 +190,49 @@ public class JogoDaVelha {
 
 	public boolean empate() {
 		return !temVencedor();
+	}
+	
+	public void LerJogada() {
+		
+	}
+	
+	public static void main(String[] args) {
+		JogoDaVelha jogo = new JogoDaVelha();
+		Scanner sc = new Scanner(System.in);
+		int jogada = 0;
+		jogo.inicia();
+		while(jogo.numJogadas < 9 && jogo.temVencedor()!=true){
+			
+			if(jogo.vezJogador(jogo.numJogadas, "X"))
+				System.out.println("\nVez do Jogador X: " + jogo.numJogadas);
+			else if(jogo.vezJogador(jogo.numJogadas, "O"))
+				System.out.println("\nVez do Jogador O: ");
+			
+			try {
+				
+				jogada = sc.nextInt();
+				
+			}catch(NumberFormatException e) {
+				System.out.println(e);
+			}catch(InputMismatchException e2) {
+				System.out.println(e2);
+				sc.nextLine();
+			}
+			
+			
+			
+			if(jogo.ehJogadaValida(jogada)) {
+				jogo.marca(jogada);
+			}
+			else
+				System.out.println("Jogada Inválida!");
+			
+			if(jogo.temVencedor() && jogo.vezJogador(jogo.numJogadas, "X"))
+				System.out.println("\nO jogador 'O' venceu o jogo!");
+			else if(jogo.temVencedor() && jogo.vezJogador(jogo.numJogadas, "O"))
+				System.out.println("\nO jogador 'X' venceu o jogo!");
+			
+		}
 	}
 
 }

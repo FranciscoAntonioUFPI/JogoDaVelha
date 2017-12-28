@@ -111,6 +111,7 @@ public class JogoDaVelhaTest {
 		assertEquals("Deveria ser 0.", 0, j.getOrdemDeJogada());
 		for (int numJogadas = 1; numJogadas <= 9; numJogadas++) {
 			j.marca(r.nextInt(9) + 1);
+			System.out.println("Teste incremento: "+j.getOrdemDeJogada());
 			assertEquals("Deveria ser .", numJogadas, j.getOrdemDeJogada());
 		}
 	}
@@ -120,9 +121,9 @@ public class JogoDaVelhaTest {
 		j.inicia();
 		Random r = new Random();
 		for (int numJogadas = 1; numJogadas <= 4; numJogadas++) {
-			j.marca(r.nextInt(9) + 1);
-			assertFalse("Nao deveria ter vencedor!", j.temVencedor());
+			j.marca(numJogadas);
 		}
+		assertFalse("Nao deveria ter vencedor!", j.temVencedor());
 	}
 
 	@Test
@@ -228,5 +229,6 @@ public class JogoDaVelhaTest {
 		j.marca(4);
 		assertTrue("deveria ter vencedor!", j.empate());
 	}
+	
 
 }
